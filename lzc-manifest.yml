@@ -15,11 +15,11 @@ application:
         - /*
       do:
         - src: file:///lzcapp/pkg/content/lazycat-injects/lzc-file-chooser-inject.js
-
 services:
   tailcat-webui:
     # Upstream: ghcr.io/ca-x/tailcat-webui:0.1.1
-    image: ghcr.io/ca-x/tailcat-webui:0.1.1
+    # upstream: ghcr.io/ca-x/tailcat-webui:v0.1.1
+    image: registry.lazycat.cloud/czyt/ca-x/tailcat-webui:5707d343a4a32824
     binds:
       - /lzcapp/var/data:/data
     environment:
@@ -50,5 +50,4 @@ services:
       - TAILCAT_WEBUI_TRANSFER_RETENTION={{ .U.transfer_expiry }}
       - TAILCAT_WEBUI_TRANSFER_UPLOAD_TIMEOUT={{ .U.transfer_upload_timeout }}
       - TAILCAT_WEBUI_LOG_LEVEL={{ .U.log_level }}
-
 usage: "使用懒猫 OIDC 登录。管理控制台使用主域名，公开发布资源使用独立的 publish 次级域名；设置向导中的网络目标白名单决定端口映射、出口转发和 DERP 主机范围。"
