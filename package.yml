@@ -1,0 +1,18 @@
+package: community.lazycat.app.tailcat-webui
+version: 0.1.1
+name: Tailcat WebUI
+description: "A multi-user Tailcat control plane and responsive web console"
+author: czyt
+license: AGPL-3.0
+homepage: https://github.com/ca-x/tailcat-webui
+min_os_version: 1.5.0
+permissions:
+  required:
+    - net.internet
+locales:
+  zh:
+    name: Tailcat WebUI
+    description: "一个支持多用户的 Tailcat 控制平面和响应式 Web 控制台"
+  en:
+    name: Tailcat WebUI
+    description: "A multi-user Tailcat control plane and responsive web console"

@@ -1,0 +1,54 @@
+application:
+  subdomain: tailcat-webui
+  secondary_domains:
+    - publish
+  oidc_redirect_path: /api/v1/auth/callback
+  public_path:
+    - /
+  upstreams:
+    - location: /
+      backend: http://tailcat-webui:8080/
+  injects:
+    - id: open-save-chooser
+      on: browser
+      when:
+        - /*
+      do:
+        - src: file:///lzcapp/pkg/content/lazycat-injects/lzc-file-chooser-inject.js
+
+services:
+  tailcat-webui:
+    # Upstream: ghcr.io/ca-x/tailcat-webui:0.1.1
+    image: ghcr.io/ca-x/tailcat-webui:0.1.1
+    binds:
+      - /lzcapp/var/data:/data
+    environment:
+      - TAILCAT_WEBUI_ADDR=0.0.0.0:8080
+      - TAILCAT_WEBUI_DATA_DIR=/data
+      - TAILCAT_WEBUI_BASE_URL=https://{{ .S.AppDomain }}
+      - TAILCAT_WEBUI_PUBLISH_BASE_URL=https://publish.{{ .S.BoxDomain }}
+      - TAILCAT_WEBUI_MASTER_KEY={{ stable_secret "tailcat_master_key" | substr 0 32 | b64enc }}
+      - TAILCAT_WEBUI_OIDC_ISSUER=${LAZYCAT_AUTH_OIDC_ISSUER_URI}
+      - TAILCAT_WEBUI_OIDC_CLIENT_ID=${LAZYCAT_AUTH_OIDC_CLIENT_ID}
+      - TAILCAT_WEBUI_OIDC_CLIENT_SECRET=${LAZYCAT_AUTH_OIDC_CLIENT_SECRET}
+      - {{ printf "TAILCAT_WEBUI_OIDC_SCOPES=%s" .U.oidc_scopes | quote }}
+      - TAILCAT_WEBUI_DEMO_MODE=false
+      - TAILCAT_WEBUI_DEMO_UNSAFE_SSH=false
+      - TAILCAT_WEBUI_DEMO_EMAIL=operator@example.test
+      - {{ printf "TAILCAT_WEBUI_ALLOWED_MAPPING_TARGETS=%s" .U.allowed_mapping_targets | quote }}
+      - {{ printf "TAILCAT_WEBUI_ALLOWED_EXIT_TARGETS=%s" .U.allowed_exit_targets | quote }}
+      - {{ printf "TAILCAT_WEBUI_TRUSTED_PROXIES=%s" .U.trusted_proxies | quote }}
+      - {{ printf "TAILCAT_WEBUI_ALLOWED_DERP_HOSTS=%s" .U.allowed_derp_hosts | quote }}
+      - {{ printf "TAILCAT_WEBUI_TRANSFER_MAX_FILE_BYTES=%s" .U.transfer_max_file_bytes | quote }}
+      - {{ printf "TAILCAT_WEBUI_TRANSFER_MAX_SHARE_BYTES=%s" .U.transfer_max_share_bytes | quote }}
+      - {{ printf "TAILCAT_WEBUI_TRANSFER_MAX_JOB_BYTES=%s" .U.transfer_max_job_bytes | quote }}
+      - {{ printf "TAILCAT_WEBUI_TRANSFER_MAX_OWNER_BYTES=%s" .U.transfer_max_owner_bytes | quote }}
+      - {{ printf "TAILCAT_WEBUI_TRANSFER_MAX_FILES_PER_SHARE=%s" .U.transfer_max_files_per_share | quote }}
+      - TAILCAT_WEBUI_TRANSFER_WORKERS=4
+      - {{ printf "TAILCAT_WEBUI_TRANSFER_MAX_JOBS_PER_OWNER=%s" .U.transfer_max_jobs_per_owner | quote }}
+      - {{ printf "TAILCAT_WEBUI_TRANSFER_EXPIRY=%s" .U.transfer_expiry | quote }}
+      - {{ printf "TAILCAT_WEBUI_TRANSFER_RETENTION=%s" .U.transfer_expiry | quote }}
+      - {{ printf "TAILCAT_WEBUI_TRANSFER_UPLOAD_TIMEOUT=%s" .U.transfer_upload_timeout | quote }}
+      - {{ printf "TAILCAT_WEBUI_LOG_LEVEL=%s" .U.log_level | quote }}
+
+usage: "使用懒猫 OIDC 登录。管理控制台使用主域名，公开发布资源使用独立的 publish 次级域名；设置向导中的网络目标白名单决定端口映射、出口转发和 DERP 主机范围。"

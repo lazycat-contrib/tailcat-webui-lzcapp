@@ -1,0 +1,130 @@
+params:
+  - id: oidc_scopes
+    type: string
+    name: OIDC scopes
+    description: Comma-separated OIDC scopes; must include openid
+    default_value: openid,profile,email
+    optional: false
+  - id: allowed_mapping_targets
+    type: string
+    name: Mapping target allowlist
+    description: Comma-separated CIDR or host and port rules allowed for explicit port mappings
+    default_value: 127.0.0.0/8,::1/128
+    optional: false
+  - id: allowed_exit_targets
+    type: string
+    name: Exit target allowlist
+    description: Comma-separated CIDR and optional port rules an exit node may reach; domain rules are rejected
+    default_value: ""
+    optional: true
+  - id: trusted_proxies
+    type: string
+    name: Trusted proxy CIDRs
+    description: Comma-separated proxy CIDRs trusted for X-Forwarded-For rate-limit identity; leave empty unless confirmed
+    default_value: ""
+    optional: true
+  - id: allowed_derp_hosts
+    type: string
+    name: Allowed DERP hosts
+    description: Comma-separated additional HTTPS DERP map or relay hosts users may select
+    default_value: ""
+    optional: true
+  - id: transfer_max_file_bytes
+    type: string
+    name: Maximum file size
+    description: Per-file staging limit from 1B through 512MiB using an IEC unit
+    default_value: 512MiB
+    optional: false
+  - id: transfer_max_share_bytes
+    type: string
+    name: Maximum share size
+    description: Total bytes in one outgoing share, at least the file limit and at most 1GiB
+    default_value: 1GiB
+    optional: false
+  - id: transfer_max_job_bytes
+    type: string
+    name: Maximum job size
+    description: Total bytes in one incoming job, at least the file limit and at most 1GiB
+    default_value: 1GiB
+    optional: false
+  - id: transfer_max_owner_bytes
+    type: string
+    name: Maximum owner staging size
+    description: Total staged bytes per owner, covering one share or job and at most 2GiB
+    default_value: 2GiB
+    optional: false
+  - id: transfer_max_files_per_share
+    type: string
+    name: Maximum files per share
+    description: File count allowed in one share or job, from 1 through 1000
+    default_value: "1000"
+    optional: false
+  - id: transfer_max_jobs_per_owner
+    type: string
+    name: Maximum jobs per owner
+    description: Concurrent receive jobs per owner, either 1 or 2
+    default_value: "2"
+    optional: false
+  - id: transfer_expiry
+    type: string
+    name: Transfer lifetime
+    description: Share and job lifetime using a Go duration from 1s through 24h
+    default_value: 24h
+    optional: false
+  - id: transfer_upload_timeout
+    type: string
+    name: Upload timeout
+    description: Browser upload read deadline using a Go duration from 1s through 1h
+    default_value: 30m
+    optional: false
+  - id: log_level
+    type: string
+    name: Log level
+    description: Application log level, normally info or debug
+    default_value: info
+    optional: false
+
+locales:
+  zh:
+    oidc_scopes:
+      name: OIDC 范围
+      description: 逗号分隔，必须包含 openid
+    allowed_mapping_targets:
+      name: 端口映射目标白名单
+      description: 允许显式端口映射访问的 CIDR 或主机与端口规则，逗号分隔
+    allowed_exit_targets:
+      name: 出口目标白名单
+      description: 出口节点可访问的 CIDR 与可选端口规则，不能使用域名
+    trusted_proxies:
+      name: 可信代理 CIDR
+      description: 可提供 X-Forwarded-For 限流身份的代理网段；未确认时请留空
+    allowed_derp_hosts:
+      name: 允许的 DERP 主机
+      description: 用户可选择的额外 HTTPS DERP Map 或中继主机，逗号分隔
+    transfer_max_file_bytes:
+      name: 单文件大小上限
+      description: 单文件暂存限制，使用 IEC 单位，范围为 1B 至 512MiB
+    transfer_max_share_bytes:
+      name: 分享总大小上限
+      description: 单个发出分享的总大小，不能小于单文件上限且不超过 1GiB
+    transfer_max_job_bytes:
+      name: 接收任务总大小上限
+      description: 单个接收任务的总大小，不能小于单文件上限且不超过 1GiB
+    transfer_max_owner_bytes:
+      name: 用户暂存总大小上限
+      description: 每位用户的总暂存大小，需覆盖一个分享或任务且不超过 2GiB
+    transfer_max_files_per_share:
+      name: 每次分享文件数上限
+      description: 每个分享或任务允许 1 至 1000 个文件
+    transfer_max_jobs_per_owner:
+      name: 每位用户并发任务数
+      description: 每位用户可同时进行 1 或 2 个接收任务
+    transfer_expiry:
+      name: 传输有效期
+      description: 使用 Go duration 格式，范围为 1 秒至 24 小时
+    transfer_upload_timeout:
+      name: 上传超时
+      description: 浏览器上传读取超时，使用 Go duration 格式，范围为 1 秒至 1 小时
+    log_level:
+      name: 日志级别
+      description: 应用日志级别，通常为 info 或 debug

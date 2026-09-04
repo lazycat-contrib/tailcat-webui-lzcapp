@@ -1,0 +1,57 @@
+version: 1
+
+project:
+  root: .
+  build_config: lzc-build.yml
+  package_file: package.yml
+  output: dist/application.lpk
+  target_arch: amd64
+
+update:
+  strategy: publish
+  allow_downgrade: false
+  version_source:
+    type: image
+    image: tailcat-webui
+
+build:
+  run_buildscript: true
+
+images:
+  - id: tailcat-webui
+    target: service
+    service: tailcat-webui
+    source: ghcr.io/ca-x/tailcat-webui
+    channel: stable
+    sort: semver
+    tag_regex: '^v?\d+\.\d+\.\d+$'
+    delivery:
+      mode: lazycat
+
+stores:
+  official:
+    enabled: true
+    continue_if_newer_version: true
+    skip_if_version_exists: true
+    create_if_missing: true
+    changelog_locales: [zh, en]
+    application:
+      language: zh
+      name: Tailcat WebUI
+      brief: 多用户 Tailcat 控制平面与响应式 Web 控制台
+      description: 一个支持多用户的 Tailcat 控制平面和响应式 Web 控制台，提供 OIDC 登录、Tailnet 管理、诊断、资源发布与安全文件传输能力。
+      keywords: Tailcat,Tailnet,网络管理,OIDC,控制平面
+      source: https://github.com/ca-x/tailcat-webui
+      source_author: ca-x
+      support_pc: true
+      support_mobile: false
+      screenshot_pc_files:
+        - .github/screenshots/diagnostics-desktop-light.png
+        - .github/screenshots/server-desktop-light.png
+    retry:
+      enabled: false
+  private:
+    enabled: true
+    skip_if_version_exists: true
+    name: Tailcat WebUI
+    summary: Stable releases published from GitHub Actions
